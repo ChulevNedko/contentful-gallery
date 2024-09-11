@@ -1,6 +1,13 @@
 // Replace with your Contentful Space ID and Management API Token
 const SPACE_ID = 'knjrsi0p38d7';
-const MANAGEMENT_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU';
+const MANAGEMENT_TOKEN = 'your_management_api_token';
+const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
+
+// Initialize Contentful client for fetching images
+const client = contentful.createClient({
+  space: SPACE_ID,
+  accessToken: DELIVERY_ACCESS_TOKEN,
+});
 
 // Function to handle the file upload process
 async function uploadFile(file) {
@@ -12,7 +19,7 @@ async function uploadFile(file) {
     const uploadResponse = await fetch(uploadUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${MANAGEMENT_TOKEN}`,
+        Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
         'Content-Type': file.type,
       },
       body: file,
@@ -28,7 +35,7 @@ async function uploadFile(file) {
     const assetCreationResponse = await fetch(assetUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${MANAGEMENT_TOKEN}`,
+        Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
         'Content-Type': 'application/vnd.contentful.management.v1+json',
       },
       body: JSON.stringify({
@@ -64,7 +71,7 @@ async function uploadFile(file) {
     const publishResponse = await fetch(publishUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${MANAGEMENT_TOKEN}`,
+        Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
         'X-Contentful-Version': assetData.sys.version,
       },
     });
@@ -76,11 +83,47 @@ async function uploadFile(file) {
     console.log('File uploaded and published successfully');
     document.getElementById('uploadStatus').innerText = 'Upload successful!';
 
-    // Optionally, you can refresh or re-fetch images to display the newly uploaded image
+    // Re-fetch and display images after successful upload
+    fetchAndDisplayImages();
   } catch (error) {
     console.error('Error uploading file:', error);
     document.getElementById('uploadStatus').innerText = `Error: ${error.message}`;
   }
+}
+
+// Function to fetch images from Contentful and display them in the gallery
+function fetchAndDisplayImages() {
+  client
+    .getEntries({ content_type: 'galleryImage' }) // Replace 'galleryImage' with your content type ID
+    .then((response) => {
+      const images = response.items;
+      displayImages(images);
+    })
+    .catch((error) => console.error('Error fetching images:', error));
+}
+
+// Function to dynamically display images in the gallery
+function displayImages(images) {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = ''; // Clear the gallery before re-rendering
+
+  images.forEach((image) => {
+    const imageUrl = image.fields.image.fields.file.url;
+    const title = image.fields.title || 'Untitled';
+    const description = image.fields.description || '';
+
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item';
+    galleryItem.innerHTML = `
+      <img src="https:${imageUrl}" alt="${title}">
+      <div class="info">
+        <h3>${title}</h3>
+        <p>${description}</p>
+      </div>
+    `;
+
+    gallery.appendChild(galleryItem);
+  });
 }
 
 // Add event listener to the upload form
@@ -96,3 +139,6 @@ document.getElementById('uploadForm').addEventListener('submit', function (event
     alert('Please select a file to upload.');
   }
 });
+
+// Fetch and display images on page load
+fetchAndDisplayImages();
