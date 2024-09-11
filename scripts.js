@@ -1,7 +1,7 @@
 // Replace with your Contentful Space ID and Management API Token
 const SPACE_ID = 'knjrsi0p38d7';
 const MANAGEMENT_TOKEN = 'CFPAT-2UQZjdMv3hkSteVsqJMugbUttGphxVtoya9Qc09b0Fc';
-const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
+const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU';
 
 // Initialize Contentful client for fetching images
 const client = contentful.createClient({
@@ -116,11 +116,14 @@ function fetchAndDisplayTimeline() {
         const description = item.fields.description || '';
         const date = item.fields.date || new Date().toISOString().split('T')[0]; // Use a custom date field or default to today's date
 
+        // Ensure date parsing is done correctly
+        const startDate = new Date(date);
+
         return {
           start_date: {
-            year: new Date(date).getFullYear(),
-            month: new Date(date).getMonth() + 1,
-            day: new Date(date).getDate(),
+            year: startDate.getFullYear(),
+            month: startDate.getMonth() + 1,
+            day: startDate.getDate(),
           },
           text: {
             headline: title,
@@ -136,4 +139,32 @@ function fetchAndDisplayTimeline() {
       const timelineData = {
         title: {
           text: {
-            hea
+            headline: 'My Image Timeline',
+            text: 'A collection of images displayed chronologically.',
+          },
+        },
+        events: events,
+      };
+
+      // Initialize TimelineJS with the data
+      new TL.Timeline('timeline-embed', timelineData);
+    })
+    .catch((error) => console.error('Error fetching images:', error));
+}
+
+// Add event listener to the upload form
+document.getElementById('uploadForm').addEventListener('submit', function (event) {
+  event.preventDefault(); // Prevent the form from submitting the traditional way
+
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+
+  if (file) {
+    uploadFile(file); // Call the function to upload the selected file
+  } else {
+    alert('Please select a file to upload.');
+  }
+});
+
+// Fetch and display timeline on page load
+fetchAndDisplayTimeline();
