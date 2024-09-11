@@ -1,6 +1,6 @@
 // Replace with your Contentful Space ID and Management API Token
 const SPACE_ID = 'knjrsi0p38d7';
-const MANAGEMENT_TOKEN = 'wh9aeMURagnIlI_N5ps7mmc8gvq-01yTRhIfZnK2NfY';
+const MANAGEMENT_TOKEN = 'CFPAT-2UQZjdMv3hkSteVsqJMugbUttGphxVtoya9Qc09b0Fc';
 const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
 
 // Initialize Contentful client for fetching images
