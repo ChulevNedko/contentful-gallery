@@ -3,7 +3,6 @@ const SPACE_ID = 'knjrsi0p38d7';
 const MANAGEMENT_TOKEN = 'CFPAT-2UQZjdMv3hkSteVsqJMugbUttGphxVtoya9Qc09b0Fc';
 const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
 
-
 // Initialize Contentful client for fetching images
 const client = contentful.createClient({
   space: SPACE_ID,
@@ -23,7 +22,7 @@ async function uploadFile(file) {
         Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
         'Content-Type': 'application/octet-stream',
       },
-      body: file, // Directly use the file object from the input
+      body: file,
     });
 
     if (!uploadResponse.ok) {
@@ -67,8 +66,22 @@ async function uploadFile(file) {
 
     const assetData = await assetCreationResponse.json();
 
-    // Step 3: Publish the asset
-    const publishUrl = `${assetUrl}/${assetData.sys.id}/published`;
+    // Step 3: Wait for Asset Processing
+    const assetId = assetData.sys.id;
+    const assetProcessingUrl = `${assetUrl}/${assetId}/files/en-US/process`;
+    const processingResponse = await fetch(assetProcessingUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
+      },
+    });
+
+    if (!processingResponse.ok) {
+      throw new Error(`Failed to process asset: ${processingResponse.statusText}`);
+    }
+
+    // Step 4: Publish the asset
+    const publishUrl = `${assetUrl}/${assetId}/published`;
     const publishResponse = await fetch(publishUrl, {
       method: 'PUT',
       headers: {
