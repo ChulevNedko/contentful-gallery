@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Gallery</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Contentful SDK -->
+  <!-- Contentful SDK - Used only for fetching images, not for uploads -->
   <script src="https://unpkg.com/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
@@ -13,10 +13,19 @@
     <h1>Image Gallery</h1>
   </header>
 
+  <!-- Image Upload Form -->
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" required>
+    <button type="submit">Upload Image</button>
+  </form>
+  <div id="uploadStatus"></div>
+
+  <!-- Gallery Section -->
   <div class="gallery" id="gallery">
     <!-- Images will be dynamically loaded here -->
   </div>
 
+  <!-- Include the JavaScript file for handling the uploads and gallery display -->
   <script src="scripts.js"></script>
 </body>
 </html>
