@@ -4,8 +4,8 @@ const ACCESS_TOKEN = 'your_access_token';
 
 // Initialize Contentful client
 const client = contentful.createClient({
-  space: SPACE_ID,
-  accessToken: ACCESS_TOKEN
+  space: 'knjrsi0p38d7',
+  accessToken: '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
 });
 
 // Fetch images from Contentful
