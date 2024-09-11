@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Gallery</title>
+  <title>Image Timeline</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Include TimelineJS library -->
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+  <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
   <!-- Contentful SDK - Used only for fetching images, not for uploads -->
   <script src="https://unpkg.com/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
   <header>
-    <h1>Image Gallery</h1>
+    <h1>Image Timeline</h1>
   </header>
 
   <!-- Image Upload Form -->
@@ -20,12 +23,10 @@
   </form>
   <div id="uploadStatus"></div>
 
-  <!-- Gallery Section -->
-  <div class="gallery" id="gallery">
-    <!-- Images will be dynamically loaded here -->
-  </div>
+  <!-- Timeline Container -->
+  <div id="timeline-embed" style="width: 100%; height: 600px"></div>
 
-  <!-- Include the JavaScript file for handling the uploads and gallery display -->
+  <!-- Include the JavaScript file for handling the uploads and timeline display -->
   <script src="scripts.js"></script>
 </body>
 </html>
