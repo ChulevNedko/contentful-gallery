@@ -3,6 +3,7 @@ const SPACE_ID = 'knjrsi0p38d7';
 const MANAGEMENT_TOKEN = 'CFPAT-2UQZjdMv3hkSteVsqJMugbUttGphxVtoya9Qc09b0Fc';
 const DELIVERY_ACCESS_TOKEN = '0HiJ_QyDreZxamVaC8PgHN7dqGrO0pN2Ap01ghJ2puU'
 
+
 // Initialize Contentful client for fetching images
 const client = contentful.createClient({
   space: SPACE_ID,
@@ -20,9 +21,9 @@ async function uploadFile(file) {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${MANAGEMENT_TOKEN}`,
-        'Content-Type': file.type,
+        'Content-Type': 'application/octet-stream',
       },
-      body: file,
+      body: file, // Directly use the file object from the input
     });
 
     if (!uploadResponse.ok) {
